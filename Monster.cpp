@@ -130,7 +130,7 @@ private:
 class DragonHatchling : public Monster {
 public:
     DragonHatchling(int level) : level(level) {
-        name = "드래곤 해츨링";
+        name = "드래곤 (해츨링)";
         health = 200 + level * 25;
         attack = 20 + level * 5;
     }
