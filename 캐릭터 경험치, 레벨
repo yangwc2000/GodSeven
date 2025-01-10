@@ -1,0 +1,45 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Character {
+public:
+    string name; // 캐릭터 이름
+    int health;  // 캐릭터 체력 
+    int attackPower; // 캐릭터 공격력
+    int level;  // 캐릭터 레벨
+    int experience; // 캐릭터 경험치 량
+    int experienceToNextLevel;  // 레벨업후 캐릭터 경험치량 ( 필요없을듯 )
+
+
+Character(string name, int health, int attackPower) : name(name), health(health), attackPower(attackPower) {
+    level = 1;                // 초기 레벨은 1
+    experience = 0;           // 경험치는 0
+    experienceToNextLevel = 100; // 레벨업에 필요한 경험치
+
+// 경험치 얻기
+void gainExperience(int amount)
+{
+    experience += amount;
+    cout << name << "이(가 " << amount << "의 경험치를 얻었습니다.)" << endl;
+
+    // 레벨업 체크
+    while (experience >= experienceToNextLevel) {
+        experience -= experienceToNextLevel;
+        levelUp();
+    }
+}
+
+
+    // 레벨업 처리
+    void levelUp() 
+    {
+        level++;
+        attackPower += 5;  // 레벨업 시 공격력이 증가
+        health += 10;      // 레벨업 시 체력이 증가
+        experienceToNextLevel += 50;  // 다음 레벨업에 필요한 경험치 증가 ( 이내용은 필요없을듯)
+
+        cout << name << "이(가) 레벨 " << level << "로 레벨업했습니다!" << endl;
+        cout << "새로운 체력: " << health << ", 새로운 공격력: " << attackPower << endl;
+    }
