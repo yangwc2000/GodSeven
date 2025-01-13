@@ -1,8 +1,10 @@
 ﻿#include <string>
-#include <vector>
+#include <iostream>
+#include "character.cpp"
+
 using namespace std;
 
-class Character; // 아이템이 속하는 클래스 이름이 Character라고 생각하고 일단 생성
+class Character; // 아이템이 속하는 클래스 이름이 Character라고 가정
 
 
 // 아이템 클래스
@@ -38,10 +40,13 @@ public:
         // character가 nullptr이 아닌 경우 체력을 회복
         if (character)
         {
-            character->restoreHealth(healthRestore);
+            int newHealth = character->getHealth() + healthRestore;
+            if (newHealth > character->getMaxHealth())
+                newHealth = character->getMaxHealth();
+
+            character->setHealth(newHealth);
+            cout << name << "을 사용하여 체력이 " << healthRestore << "만큼 회복되었습니다!" << endl;
         }
-        // 아이템 사용 후 삭제 (아직 전투 구현이 어떻게 될지 몰라서 미적용처리 했습니다.)
-        //delete this;
     }
 };
 
@@ -66,12 +71,19 @@ public:
     // use 함수: 캐릭터에게 아이템을 사용하여 공격력을 증가시킴
     void use(Character* character) override
     {
-        // character가 nullptr이 아닌 경우 공격력을 증가
         if (character)
         {
-            character->boostAttack(attackBoost);
+            character->setAttack(character->getAttack() + attackBoost);
+            cout << name << "을 사용하여 공격력이 " << attackBoost << "만큼 증가했습니다!" << endl;
         }
-        // 아이템 사용 후 삭제 (아직 전투 구현이 어떻게 될지 몰라서 미적용처리 했습니다.)
-        //delete this;
+    }
+    void remove(Character* character)
+    {
+        if (character)
+        {
+            // 공격력 감소
+            character->setAttack(character->getAttack() - attackBoost);
+            cout << name << "의 효과가 제거되었습니다. 공격력이 " << attackBoost << "만큼 감소했습니다!" << endl;
+        }
     }
 };
