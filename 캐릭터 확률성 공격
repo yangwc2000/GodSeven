@@ -1,0 +1,43 @@
+ void attackEnemy(Character &enemy) {
+        // 공격 성공 여부 결정 (50% 확률로 성공/실패)
+        if (rand() % 100 < 50) {
+            cout << name << " attacks " << enemy.getName() << " but misses!" << endl;
+            return;  // 공격 실패
+        }
+
+        // 공격 성공 시, 피해량 확률적으로 결정 (공격력 0.5배에서 2배까지)
+        float damageMultiplier = 0.5f + (rand() % 150) / 100.0f;  // 0.5에서 2.0 사이
+        int damage = static_cast<int>(attack * damageMultiplier);
+
+        cout << name << " attacks " << enemy.getName() << " for " << damage << " damage!" << endl;
+        enemy.takeDamage(damage);
+    }
+
+
+     void useSkill(int skillIndex, Character &target) {
+        if (skillIndex < 0 || skillIndex >= skills.size()) {
+            cout << "Invalid skill!" << endl;
+            return;
+        }
+
+        // 스킬 이름에 따라 처리 (스킬은 스킬 목록에서 이름으로 찾음)
+        string skill = skills[skillIndex];
+        if (skill == "Fireball" && mp >= 10) {
+            mp -= 10;  // Fireball 스킬은 10 MP를 소모
+            int damage = rand() % 50 + 20;  // 20~70 사이의 데미지
+            cout << name << " casts " << skill << " and deals " << damage << " damage!" << endl;
+            target.takeDamage(damage);
+        } else if (skill == "Heal" && mp >= 5) {
+            mp -= 5;  // Heal 스킬은 5 MP를 소모
+            int healAmount = rand() % 30 + 20;  // 20~50 HP 회복
+            cout << name << " casts " << skill << " and heals for " << healAmount << " HP!" << endl;
+            heal(healAmount);
+        } else if (skill == "Shield" && mp >= 8) {
+            mp -= 8;  // Shield 스킬은 8 MP를 소모
+            int shieldAmount = rand() % 10 + 5;  // 5~15 사이의 방어력 증가
+            defense += shieldAmount;
+            cout << name << " casts " << skill << " and gains " << shieldAmount << " defense!" << endl;
+        } else {
+            cout << "Not enough MP to use " << skill << "!" << endl;
+        }
+    }
