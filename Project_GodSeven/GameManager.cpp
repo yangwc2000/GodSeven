@@ -364,7 +364,7 @@ void GameManager::battleBoss(Character* player) {
                 "=== 엔딩 크레딧 ===",
                 "",
                 "프로젝트명 : GOD SEVEN",
-                "제작 by 7조",
+                "제작 by Unreal 1기 연매출 7조",
                 "팀장 : 양우창",
                 "몬스터 디자인 : 양우창, 정완훈",
                 "전투 밸런싱 : 이재",
