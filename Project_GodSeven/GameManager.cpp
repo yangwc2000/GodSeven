@@ -366,9 +366,9 @@ void GameManager::battleBoss(Character* player) {
                 "프로젝트명 : GOD SEVEN",
                 "제작 by 7조",
                 "팀장 : 양우창",
-                "보스(드래곤) 아트 : 양우창",
-                "몬스터 아트 : 정완훈",
+                "몬스터 디자인 : 양우창, 정완훈",
                 "전투 밸런싱 : 이재",
+                "잡기술 : 정완훈",
                 "",
                 "Special Thanks to " + player->getName() + "!",
             };
