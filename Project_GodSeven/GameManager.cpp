@@ -475,7 +475,7 @@ void GameManager::playShellGame(Character* player) {
         player->addGold(betAmount * 2);
     }
     else {
-        std::cout << "야바위꾼 : 흐흐, 벌써 끝인가?\n";
+        std::cout << "야바위꾼 : 흐흐, 내가 이겼구만. 어라, 벌써 끝인가?\n";
         player->addGold(-betAmount);
     }
 
