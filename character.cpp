@@ -1,54 +1,74 @@
-﻿#include <iostream>
-#include <string>
+#include "Character.h"
+#include <cstdlib>
+#include <ctime>
+#include <iostream>
 
-using namespace std;
+// 생성자: 체력, 공격력 초기화 및 난수 초기화
+Character::Character(int health, int maxHealth, int attack)
+    : health(health), maxHealth(maxHealth), attack(attack)
+{
+    srand(static_cast<unsigned>(time(nullptr))); // 난수 초기화
+}
 
-class Character {
-private:
-    string name; // 캐릭터 이름
-    int level; // 캐릭터 레벨
-    int health; // 캐릭터 체력
-    int maxHealth; // 최대 체력
-    int attack; // 캐릭터 공격력
-    int experience; // 경험치
-    int gold; // 골드
-
-    static Character* instance; // 싱글톤 인스턴스
-
-    // 생성자는 private으로 설정되어 외부에서 호출 불가
-    Character(const string& name)
-        : name(name), level(1), health(200), maxHealth(200),
-        attack(30), experience(0), gold(0) {
+// 소멸자: 인벤토리에 있는 아이템 삭제
+Character::~Character()
+{
+    for (Item* item : inventory)
+    {
+        delete item;
     }
+    inventory.clear();
+}
 
-public:
-    // 싱글톤 인스턴스를 반환하는 메서드
-    static Character* getInstance(const string& name = "") {
-        if (instance == nullptr) {
-            instance = new Character(name);
-        }
-        return instance;
+int Character::getHealth() const
+{
+    return health;
+}
+
+int Character::getMaxHealth() const
+{
+    return maxHealth;
+}
+
+int Character::getAttack() const
+{
+    return attack;
+}
+
+void Character::setHealth(int newHealth)
+{
+    health = newHealth;
+}
+
+void Character::setAttack(int newAttack)
+{
+    attack = newAttack;
+}
+
+void Character::addItem(Item* item)
+{
+    inventory.push_back(item); // 인벤토리에 아이템 추가
+    std::cout << item->getName() << "이(가) 인벤토리에 추가되었습니다!" << std::endl;
+}
+
+void Character::useRandomItem()
+{
+    if (!inventory.empty() && (rand() % 100) < 30) // 30% 확률로 실행
+    {
+        int randomIndex = rand() % inventory.size(); // 랜덤 인덱스 선택
+        std::cout << "먹을게 있나?" << std::endl; // 아이템 사용 전 출력
+        inventory[randomIndex]->use(this); // 선택된 아이템 사용
+
+        // 사용 후 아이템 제거
+        delete inventory[randomIndex];
+        inventory.erase(inventory.begin() + randomIndex);
     }
+}
 
-    // 캐릭터 상태 출력 함수
-    void displayStatus() const {
-        cout << "이름: " << name
-            << ", 레벨: " << level
-            << ", 체력: " << health << "/" << maxHealth
-            << ", 공격력: " << attack
-            << ", 경험치: " << experience
-            << ", 골드: " << gold << endl;
+void Character::showInventory() const
+{
+    for (size_t i = 0; i < inventory.size(); ++i)
+    {
+        std::cout << i + 1 << ". " << inventory[i]->getName() << std::endl;
     }
-
-    // 접근자 메서드 (getters)
-    int getHealth() const { return health; }
-    int getMaxHealth() const { return maxHealth; }
-    int getAttack() const { return attack; }
-
-    // 수정자 메서드 (setters)
-    void setHealth(int h) { health = h; }
-    void setAttack(int a) { attack = a; }
-};
-
-// 싱글톤 인스턴스 초기화
-Character* Character::instance = nullptr;
+}

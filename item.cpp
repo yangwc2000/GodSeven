@@ -1,89 +1,50 @@
-﻿#include <string>
-#include <iostream>
-#include "character.cpp"
+#include "Item.h"
+#include "Character.h"
 
-using namespace std;
+// HealthPotion 구현
+HealthPotion::HealthPotion() : name("회복 포션"), healthRestore(50) {}
 
-class Character; // 아이템이 속하는 클래스 이름이 Character라고 가정
-
-
-// 아이템 클래스
-class Item
+std::string HealthPotion::getName() const
 {
-public:
-    virtual ~Item() = default; // 아이템 객체가 삭제될 때 호출
-    virtual string getName() const = 0; // 아이템의 이름을 반환하는 함수
-    virtual void use(Character* character) = 0; // 아이템을 사용하는 함수
-};
+    return name; // 아이템 이름 반환
+}
 
-
-// 아이템 클래스에 속하는 체력 회복 아이템
-class HealthPotion : public Item
+void HealthPotion::use(Character* character)
 {
-private:
-    string name; // 아이템의 이름
-    int healthRestore; // 체력 회복량
-
-public:
-    // 생성자: 이름을 "회복 포션"으로 설정하고, 체력 회복량을 50으로 설정
-    HealthPotion() : name("회복 포션"), healthRestore(50) {}
-
-    // getName 함수: 아이템의 이름을 반환
-    string getName() const override
+    if (character)
     {
-        return name;
-    }
-
-    // use 함수: 캐릭터에게 아이템을 사용하여 체력을 회복시킴
-    void use(Character* character) override
-    {
-        // character가 nullptr이 아닌 경우 체력을 회복
-        if (character)
+        int newHealth = character->getHealth() + healthRestore; // 체력 회복량 계산
+        if (newHealth > character->getMaxHealth())
         {
-            int newHealth = character->getHealth() + healthRestore;
-            if (newHealth > character->getMaxHealth())
-                newHealth = character->getMaxHealth();
-
-            character->setHealth(newHealth);
-            cout << name << "을 사용하여 체력이 " << healthRestore << "만큼 회복되었습니다!" << endl;
+            newHealth = character->getMaxHealth(); // 최대 체력을 초과하지 않음
         }
+        character->setHealth(newHealth); // 회복된 체력 설정
+        std::cout << name << "을 마시고 체력이 " << healthRestore << "만큼 회복되었습니다!" << std::endl;
     }
-};
+}
 
+// AttackBoost 구현
+AttackBoost::AttackBoost() : name("공격력증가 쿠키"), attackBoost(10) {}
 
-// 아이템 클래스에 속하는 공격력 증가 아이템
-class AttackBoost : public Item
+std::string AttackBoost::getName() const
 {
-private:
-    string name; // 아이템의 이름
-    int attackBoost; // 공격력 증가량
+    return name; // 아이템 이름 반환
+}
 
-public:
-    // 이름을 "공격력증가 포션"으로 설정하고, 공격력 증가량을 10으로 설정
-    AttackBoost() : name("공격력증가 포션"), attackBoost(10) {}    // 아이템 이름은 추후 컨셉에 맞게 수정 가능합니다.
+void AttackBoost::use(Character* character)
+{
+    if (character)
+    {
+        character->setAttack(character->getAttack() + attackBoost); // 공격력 증가
+        std::cout << name << "를 먹고 공격력이 " << attackBoost << "만큼 증가했습니다!" << std::endl;
+    }
+}
 
-    // getName 함수: 아이템의 이름을 반환
-    string getName() const override
+void AttackBoost::remove(Character* character)
+{
+    if (character)
     {
-        return name;
+        character->setAttack(character->getAttack() - attackBoost); // 공격력 감소
+        std::cout << name << "의 효과가 사라졌습니다. 공격력이 " << attackBoost << "만큼 감소했습니다!" << std::endl;
     }
-
-    // use 함수: 캐릭터에게 아이템을 사용하여 공격력을 증가시킴
-    void use(Character* character) override
-    {
-        if (character)
-        {
-            character->setAttack(character->getAttack() + attackBoost);
-            cout << name << "을 사용하여 공격력이 " << attackBoost << "만큼 증가했습니다!" << endl;
-        }
-    }
-    void remove(Character* character)
-    {
-        if (character)
-        {
-            // 공격력 감소
-            character->setAttack(character->getAttack() - attackBoost);
-            cout << name << "의 효과가 제거되었습니다. 공격력이 " << attackBoost << "만큼 감소했습니다!" << endl;
-        }
-    }
-};
+}
