@@ -56,7 +56,7 @@ void Character::useRandomItem()
     if (!inventory.empty() && (rand() % 100) < 30) // 30% 확률로 실행
     {
         int randomIndex = rand() % inventory.size(); // 랜덤 인덱스 선택
-        std::cout << "먹을게 있나?" << std::endl; // 아이템 사용 전 출력
+        std::cout << "인벤토리를 열어봅니다." << std::endl; // 아이템 사용 전 출력
         inventory[randomIndex]->use(this); // 선택된 아이템 사용
 
         // 사용 후 아이템 제거
@@ -67,8 +67,13 @@ void Character::useRandomItem()
 
 void Character::showInventory() const
 {
+    std::cout << "===== 인벤토리 목록 =====\n";
     for (size_t i = 0; i < inventory.size(); ++i)
     {
-        std::cout << i + 1 << ". " << inventory[i]->getName() << std::endl;
+        std::cout << i << ": " << inventory[i]->getName() << "\n";
+    }
+    if (inventory.empty())
+    {
+        std::cout << "(텅 비었습니다...)\n";
     }
 }
