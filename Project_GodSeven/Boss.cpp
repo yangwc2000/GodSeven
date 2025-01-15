@@ -3,7 +3,7 @@
 #include "Item.h"
 
 Dragon::Dragon()
-    : Monster("드래곤(해츨링)", 800, 70) {
+    : Monster("드래곤(해츨링)", 700, 80) {
 }
 
 void Dragon::breathAttack() {

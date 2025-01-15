@@ -18,6 +18,9 @@ public:
     int getAttack() const;
     void takeDamage(int damage);
     virtual Item* dropItem() const = 0; // 드랍 아이템 메서드 추가
+
+    // 기본 생성자 추가
+    Monster() : name(""), health(0), attack(0) {}
 };
 
 class Goblin : public Monster {

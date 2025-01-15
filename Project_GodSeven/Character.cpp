@@ -2,6 +2,8 @@
 #include "Character.h"
 #include <iostream>
 #include <random>
+#include <cstdlib>
+#include <ctime>
 #include "Boss.h"
 
 Character::Character(const std::string& name)
@@ -138,7 +140,7 @@ Item* Character::removeItem(int index) {
     return nullptr;
 }
 int Character::performRandomAttack(Monster* target) {
-    if (!target) return 0; // 타겟이 없을 경우 0 반환
+    if (!target) return 0;
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -148,6 +150,15 @@ int Character::performRandomAttack(Monster* target) {
     int finalAttack = static_cast<int>(attack * randomMultiplier);
 
     target->takeDamage(finalAttack);
-    std::cout << name << "의 공격! (공격력: " << finalAttack << ")" << std::endl; // 공격 시 출력은 그대로 유지
-    return finalAttack; // 계산된 공격력 반환
+
+    std::cout << name << "의 공격! (공격력: " << finalAttack << ")";
+
+    if (randomMultiplier > 1.0) { // 크리티컬 여부 확인
+        std::cout << "\033[1;31m 크리티컬!\033[0m" << std::endl;
+    }
+    else {
+        std::cout << std::endl;
+    }
+
+    return finalAttack;
 }

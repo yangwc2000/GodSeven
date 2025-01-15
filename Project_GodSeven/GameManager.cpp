@@ -128,14 +128,16 @@ void printWithDelay(const std::string& text, int delay = 50) { // delay 기본�
 void GameManager::displayTitleScreen() {
     system("cls");
 
-    std::cout << R"(
-   ######   ######  #######      ####### ####### ##    ## ####### ###    ##
-  ##       ##    ## ##    ##     ##      ##      ##    ## ##      ####   ##
-  ##   ### ##    ## ##     #     ####### #####   ##    ## #####   ## ##  ##
-  ##    ## ##    ## ##    ##          ## ##       ##  ##  ##      ##  ## ##
-   ######   ######  #######      ####### #######   ####   ####### ##   ####
+    std::cout << "\033[1;33m" << R"(
+ =============================================================================
+ |  ######   ######  #######      ####### ####### ##    ## ####### ###    ## | 
+ | ##       ##    ## ##    ##     ##      ##      ##    ## ##      ####   ## |
+ | ##   ### ##    ## ##     #     ####### #####   ##    ## #####   ## ##  ## |
+ | ##    ## ##    ## ##    ##          ## ##       ##  ##  ##      ##  ## ## |
+ |  ######   ######  #######      ####### #######   ####   ####### ##   #### |
+ =============================================================================
+  )" << "\033[0m" << "\n"; // 색상 리셋
 
-    )" << "\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(500)); // 타이틀 잠시 보여주기
 
     printWithDelay(
@@ -178,7 +180,7 @@ void GameManager::displayTitleScreen() {
         30
     );
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
-    
+
 
     printWithDelay("Press Start...", 30);
     printWithDelay("아무 키나 눌러서 시작하세요!", 10);
@@ -317,7 +319,7 @@ void GameManager::battle(Character* player, int habitat) {
             << "2. 아이템 사용\n"
             << "3. 도망가기\n" // 도망가기 옵션 추가
             << "선택 > "
-		<< "\n\n";
+            << "\n\n";
 
         int choice;
         std::cin >> choice;
@@ -668,7 +670,7 @@ void GameManager::visitShop(Character* player) { //------- 명칭 수정
             if (sellChoice >= 0) {
                 Item* item = player->getItem(sellChoice);
                 if (item) {
-					int sellPrice = static_cast<int>(item->getPrice() * 0.6); // 원가의 60%
+                    int sellPrice = static_cast<int>(item->getPrice() * 0.6); // 원가의 60%
                     player->addGold(sellPrice);
                     player->removeItem(sellChoice);
                     std::cout << item->getName() << "을(를) " << sellPrice << "G에 판매했습니다!\n";

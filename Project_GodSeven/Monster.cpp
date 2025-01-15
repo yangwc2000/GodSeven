@@ -4,6 +4,9 @@
 #include <vector>
 #include <random>
 
+std::random_device rd;
+std::mt19937 gen(rd());
+
 Monster::Monster(const std::string& name, int health, int attack)
     : name(name), health(health), attack(attack) {
 }
@@ -25,44 +28,69 @@ void Monster::takeDamage(int damage) {
     if (health < 0) health = 0;
 }
 
-// Goblin 클래스의 정의
-Goblin::Goblin(int level)
-    : Monster("Goblin", (level * 20 + rand() % 10) * 2, (level * 5 + rand() % 5) * 3) {
+// Goblin 클래스
+Goblin::Goblin(int level) {
+    // 레벨 범위 검사 및 조정 (생성자 시작 부분)
     if (level < 3) level = 3;
     if (level > 5) level = 5;
+
+    std::uniform_int_distribution<> healthDist(0, 9); // 0~9 난수 생성
+    std::uniform_int_distribution<> attackDist(0, 4); // 0~4 난수 생성
+
+    health = (level * 17 + healthDist(gen)) * 2;
+    attack = (level * 3 + attackDist(gen)) * 2;
+    name = "Goblin";
 }
 
 Item* Goblin::dropItem() const {
     return new Treasure("고블린 금화", 20);
 }
 
-// Orc 클래스의 정의
-Orc::Orc(int level)
-    : Monster("Orc", (level * 25 + rand() % 10) * 2, (level * 7 + rand() % 5) * 3) {
+// Orc 클래스 (동일한 방식으로 수정)
+Orc::Orc(int level) {
     if (level < 5) level = 5;
     if (level > 7) level = 7;
+
+    std::uniform_int_distribution<> healthDist(0, 9);
+    std::uniform_int_distribution<> attackDist(0, 4);
+
+    health = (level * 20 + healthDist(gen)) * 2;
+    attack = (level * 5 + attackDist(gen)) * 2;
+    name = "Orc";
 }
 
 Item* Orc::dropItem() const {
     return new Treasure("오크의 어금니", 30);
 }
 
-// Troll 클래스의 정의
-Troll::Troll(int level)
-    : Monster("Troll", (level * 30 + rand() % 15) * 3, (level * 7 + rand() % 7) * 1) {
+// Troll 클래스 (동일한 방식으로 수정)
+Troll::Troll(int level) {
     if (level < 7) level = 7;
     if (level > 9) level = 9;
+
+    std::uniform_int_distribution<> healthDist(0, 14);
+    std::uniform_int_distribution<> attackDist(0, 6);
+
+    health = (level * 25 + healthDist(gen)) * 3;
+    attack = (level * 7 + attackDist(gen)); // *1은 생략
+    name = "Troll";
 }
 
 Item* Troll::dropItem() const {
     return new Treasure("트롤의 뼈", 40);
 }
 
-// Slime 클래스의 정의
-Slime::Slime(int level)
-    : Monster("Slime", (level * 15 + rand() % 5) * 3, (level * 4 + rand() % 3) * 3) {
+// Slime 클래스 (동일한 방식으로 수정)
+Slime::Slime(int level) {
     if (level < 1) level = 1;
     if (level > 3) level = 3;
+
+    std::uniform_int_distribution<> healthDist(0, 4);
+    std::uniform_int_distribution<> attackDist(0, 2);
+
+    health = (level * 12 + healthDist(gen)) * 2;
+    attack = (level * 3 + attackDist(gen)) * 2;
+    name = "Slime";
 }
 
 Item* Slime::dropItem() const {
