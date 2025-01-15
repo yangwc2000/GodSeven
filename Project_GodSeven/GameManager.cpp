@@ -137,7 +137,39 @@ void GameManager::displayTitleScreen() {
     )" << "\n";
     std::this_thread::sleep_for(std::chrono::milliseconds(500)); // 타이틀 잠시 보여주기
 
-    
+    printWithDelay("먼 옛날...", 100);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    printWithDelay("Unreal 이라는 마을에 내려오는 전설이 있다.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("그 전설은 현재까지도 구전되어 오고 있다.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("드래곤이라는 신비한 고대종을 쓰러트리면 \"GOD Seven\" 이라는", 50);
+    printWithDelay("전설의 아이템을 얻을 수 있다고 하는데", 50);
+    printWithDelay("각각, 부의 금화, 명예의 갑옷, 권력의 왕관, 지혜의 구슬, 평화의 깃털, 용기의 검, 존경의 망토를 담고 있다.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("그러나, 그 누구도 \"GOD Seven\"을 본 사람은 아무도 없었다.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("하지만...", 150); // 강조를 위해 지연 시간 증가
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    printWithDelay("그, 전설에 도전했던 수 많은 용사들이 있었으니", 50);
+    printWithDelay("첫번째 용사, \"어지니우스, 재미니우스, 주히디스\"", 50);
+    printWithDelay("두번째 용사, \"케르호스, 창미니다스, 하니우스, 호여디다스\"", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("하지만, 그들 모두 집으로 돌아오지 못하였다고 한다.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(300));
+
+    printWithDelay("그러나, 우리는 끊임없이 도전하여 \"GOD Seven\"을 향해 도전하리라.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
+
+    printWithDelay("지금 바로 새로운 용사는 전설을 향해 도전하리라.", 50);
+    std::this_thread::sleep_for(std::chrono::milliseconds(500));
 
     printWithDelay("Press Start...", 30);
     printWithDelay("아무 키나 눌러서 시작하세요!", 10);

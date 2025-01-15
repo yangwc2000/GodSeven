@@ -1,8 +1,2 @@
-﻿  Boss.cpp
-  Character.cpp
-  GameManager.cpp
-  Item.cpp
-  Main.cpp
-  Monster.cpp
-  코드를 생성하고 있습니다...
+﻿  GameManager.cpp
   Project_GodSeven.vcxproj -> C:\Users\hunlo\source\repos\Project_GodSeven\x64\Debug\Project_GodSeven.exe
