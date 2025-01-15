@@ -93,11 +93,20 @@ void Character::addItem(Item* item) {
     inventory.push_back(item);
 }
 
-void Character::useItem(int index) {
+void Character::useItem(int index) {//---------- 몬스터 드롭 아이템 사용시 없어지는 문제점 수정
     if (index >= 0 && index < inventory.size()) {
-        inventory[index]->use(this);
-        delete inventory[index];
-        inventory.erase(inventory.begin() + index);
+        Item* item = inventory[index];
+        if (dynamic_cast<Treasure*>(item) == nullptr) {
+            item->use(this);
+            delete item;
+            inventory.erase(inventory.begin() + index);
+        }
+        else {
+            std::cout << "이 아이템은 사용할 수 없습니다." << std::endl;
+        }
+    }
+    else {
+        std::cout << "잘못된 번호입니다." << std::endl;
     }
 }
 
