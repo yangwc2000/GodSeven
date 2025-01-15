@@ -58,7 +58,9 @@ std::string Treasure::getName() const {
 
 void Treasure::use(Character* character) {
     // 환금용 아이템은 사용되지 않음
+    std::cout << "이 아이템은 사용할 수 없습니다." << std::endl;
 }
+
 
 int Treasure::getPrice() const {
     return price;
