@@ -570,7 +570,7 @@ void GameManager::playShellGame(Character* player) {
 
     if (playerChoice == winningCup) {
         printWithDelay("야바위꾼 : 쳇, 축하하네.\n", 10);
-        player->addGold(betAmount * 2);
+        player->addGold(betAmount * 1);
     }
     else {
         printWithDelay("야바위꾼 : 흐흐, 내가 이겼구만. 어라, 벌써 끝인가?\n", 10);
