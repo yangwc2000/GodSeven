@@ -141,16 +141,22 @@ void GameManager::displayTitleScreen() {
     printWithDelay(
         "먼 옛날...\n"
         "Unreal 이라는 마을에 내려오는 전설이 있다.\n"
-        "그 전설은 현재까지도 구전되어 오고 있다.\n\n",
+        "그 전설은 현재까지도 구전되어 내려오고 있다.\n\n",
         30
     );
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     printWithDelay(
         "드래곤이라는 신비한 고대종을 쓰러트리면 \"GOD Seven\" 이라는\n"
-        "전설의 아이템을 얻을 수 있다고 하는데\n"
-        "각각, 부의 금화, 명예의 갑옷, 권력의 왕관, 지혜의 구슬, 평화의 깃털, 용기의 검, 존경의 망토를 담고 있다.\n"
-        "그러나, 그 누구도 \"GOD Seven\"을 본 사람은 아무도 없었다.\n\n",
+        "전설의 아이템들을 얻을 수 있다고 하는데\n"
+        "부를 축적하는 금화\n"
+        "명예를 불러오는 갑옷\n"
+        "권력을 얻게 해 주는 왕관\n"
+        "지혜롭게 해 주는 구슬\n"
+        "평화를 가져오는 깃털\n"
+        "용기를 부여하는 검\n"
+        "존경심을 일으키는 망토가 있다고 한다.\n"
+        "그러나, 지금까지 \"GOD Seven\"을 본 사람은 아무도 없었다.\n\n",
         30
     );
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -159,16 +165,16 @@ void GameManager::displayTitleScreen() {
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
 
     printWithDelay(
-        "그, 전설에 도전했던 수 많은 용사들이 있었으니\n"
+        "그 전설에 도전했던 수 많은 용사들이 있었으니\n"
         "첫번째 용사, \"어지니우스, 재미니우스, 주히디스\"\n"
         "두번째 용사, \"케르호스, 창미니다스, 하니우스, 호여디다스\"\n"
-        "하지만, 그들 모두 집으로 돌아오지 못하였다고 한다.\n\n",
+        "하지만, 모험을 떠난 그들을 본 사람은 아무도 없다고 한다.\n\n",
         30
     );
 
     printWithDelay(
         "그러나, 우리는 끊임없이 도전하여 \"GOD Seven\"을 향해 도전하리라.\n"
-        "지금 바로 새로운 용사는 전설을 향해 도전하리라.\n",
+        "새로운 용사는 지금 바로 전설을 향해 도전하라.\n",
         30
     );
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -455,6 +461,7 @@ void GameManager::battleBoss(Character* player) {
                 "몬스터 디자인 : 양우창, 정완훈",
                 "전투 밸런싱 : 이재",
                 "잡기술 : 정완훈",
+                "스토리 : 이재, 김태완",
                 "",
                 "Special Thanks to " + player->getName() + "!",
             };
