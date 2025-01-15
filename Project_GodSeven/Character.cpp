@@ -2,6 +2,7 @@
 #include "Character.h"
 #include <iostream>
 #include <random>
+#include "Boss.h"
 
 Character::Character(const std::string& name)
     : name(name), level(1), health(200), maxHealth(200), attack(30), experience(0), gold(0) {
@@ -107,4 +108,16 @@ Item* Character::removeItem(int index) {
     }
     return nullptr;
 }
+void Character::performRandomAttack(Monster* target) {
+    if (!target) return;
 
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<> dis(0.5, 1.5);
+
+    double randomMultiplier = dis(gen);
+    int finalAttack = static_cast<int>(attack * randomMultiplier);
+
+    target->takeDamage(finalAttack); // target의 takeDamage 함수 호출
+    std::cout << name << "의 공격! (공격력: " << finalAttack << ")" << std::endl;
+}

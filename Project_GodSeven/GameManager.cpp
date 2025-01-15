@@ -9,7 +9,11 @@
 #include <limits>    // numeric_limits
 #include <thread>
 #include <chrono>
+#include <random>
+#include <map>
 #include "Boss.h"    // 드래곤(boss) 사용
+#include "Monster.h"
+#include "character.h"
 
 // 간단 예시: 보스 처치 여부를 전역/정적 변수로 관리
 bool bossDefeated = false;
@@ -112,8 +116,17 @@ void GameManager::startGame() {
     delete player;
 }
 
+void printWithDelay(const std::string& text, int delay = 50) { // delay 기본값 50ms
+    for (char c : text) {
+        std::cout << c << std::flush; // std::flush 추가
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+    std::cout << std::endl;
+}
+
 void GameManager::displayTitleScreen() {
-    system("cls"); // Windows 전용 화면 클리어
+    system("cls");
+
     std::cout << R"(
    ######   ######  #######      ####### ####### ##    ## ####### ###    ##
   ##       ##    ## ##    ##     ##      ##      ##    ## ##      ####   ##
@@ -122,18 +135,53 @@ void GameManager::displayTitleScreen() {
    ######   ######  #######      ####### #######   ####   ####### ##   ####
 
     )" << "\n";
-    std::cout << "Press Start...\n\n";
-    std::cout << "아무 키나 눌러서 시작하세요!\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(500)); // 타이틀 잠시 보여주기
 
-    _getch(); // 아무 키 입력 대기 (Windows)
-    system("cls"); // 화면 클리어
+    
+
+    printWithDelay("Press Start...", 30);
+    printWithDelay("아무 키나 눌러서 시작하세요!", 10);
+
+    _getch();
+    system("cls");
 }
 
 // ────────────── 일반 전투 (몬스터) ──────────────
 void GameManager::battle(Character* player, int habitat) {
     system("cls"); // 화면 클리어
-    // 몬스터 생성 (레벨 기반)
-    Monster* monster = generateMonster(player->getExperience() / 100 + 1, habitat); // 서식지 인자 추가
+    Monster* monster = nullptr;
+
+    if (habitat == 0) {
+        monster = new Slime(player->getLevel());
+    }
+    else if (habitat == 1) {
+        monster = new Goblin(player->getLevel());
+    }
+    else if (habitat == 2) {
+        monster = new Orc(player->getLevel());
+    }
+    else if (habitat == 3) {
+        monster = new Troll(player->getLevel());
+    }
+    else {
+        // 랜덤 몬스터 생성 (기존 로직 유지)
+        int playerLevel = player->getLevel();
+        if (playerLevel >= 1 && playerLevel <= 3) {
+            monster = new Slime(playerLevel);
+        }
+        else if (playerLevel >= 4 && playerLevel <= 5) {
+            monster = new Goblin(playerLevel);
+        }
+        else if (playerLevel >= 6 && playerLevel <= 7) {
+            monster = new Orc(playerLevel);
+        }
+        else if (playerLevel >= 8 && playerLevel <= 9) {
+            monster = new Troll(playerLevel);
+        }
+        else {
+            monster = generateMonster(player->getExperience() / 100 + 1, habitat);
+        }
+    }
 
     std::cout << "\n=== 전투 시작! ===\n";
     std::cout << "몬스터 " << monster->getName()
@@ -223,6 +271,8 @@ void GameManager::battle(Character* player, int habitat) {
 
     // 전투 루프
     while (monster->getHealth() > 0 && player->getHealth() > 0) {
+        // 플레이어 공격
+        player->performRandomAttack(monster);
         std::cout << "\n어떤 행동을 하시겠습니까?\n";
         std::cout << "1. 공격하기\n"
             << "2. 아이템 사용\n"
@@ -239,11 +289,10 @@ void GameManager::battle(Character* player, int habitat) {
 
         switch (choice) {
         case 1:
-            // 플레이어 공격
-            monster->takeDamage(player->getAttack());
-            std::cout << "[플레이어] " << player->getName()
-                << " → [몬스터] " << monster->getName()
-                << " (피해: " << player->getAttack() << ")\n";
+            // 플레이어 공격 (랜덤 공격 사용)
+            player->performRandomAttack(monster);
+            if (monster->getHealth() > 0)
+                std::cout << "[몬스터 남은 체력] " << monster->getHealth() << "\n";
             break;
         case 2:
             // 인벤토리 열기 및 아이템 사용
@@ -252,6 +301,7 @@ void GameManager::battle(Character* player, int habitat) {
         case 3:
             // 도망가기
             std::cout << "[플레이어]" << player->getName() << "이(가) 추하게 도망쳤습니다!\n";
+            delete monster;
             return; // 전투 종료
         default:
             std::cout << "잘못된 입력입니다.\n";
@@ -335,10 +385,9 @@ void GameManager::battleBoss(Character* player) {
 
         switch (choice) {
         case 1:
-            boss->takeDamage(player->getAttack()); // player 포인터 전달
-            std::cout << "[플레이어] " << player->getName()
-                << " → [보스] " << boss->getName()
-                << " (피해: " << player->getAttack() << ")\n";
+            player->performRandomAttack(boss);
+            if (boss->getHealth() > 0)
+                std::cout << "[보스 남은 체력] " << boss->getHealth() << "\n";
             break;
         case 2:
             displayInventory(player);

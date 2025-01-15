@@ -2,6 +2,7 @@
 #include "Monster.h"
 #include <cstdlib>  // rand()
 #include <vector>
+#include <random>
 
 Monster::Monster(const std::string& name, int health, int attack)
     : name(name), health(health), attack(attack) {
@@ -26,7 +27,7 @@ void Monster::takeDamage(int damage) {
 
 // Goblin 클래스의 정의
 Goblin::Goblin(int level)
-    : Monster("Goblin", (level * 20 + rand() % 10) * 5, (level * 5 + rand() % 5) * 3) {
+    : Monster("Goblin", (level * 20 + rand() % 10) * 2, (level * 5 + rand() % 5) * 3) {
     if (level < 3) level = 3;
     if (level > 5) level = 5;
 }
@@ -37,7 +38,7 @@ Item* Goblin::dropItem() const {
 
 // Orc 클래스의 정의
 Orc::Orc(int level)
-    : Monster("Orc", (level * 25 + rand() % 10) * 5, (level * 7 + rand() % 5) * 3) {
+    : Monster("Orc", (level * 25 + rand() % 10) * 2, (level * 7 + rand() % 5) * 3) {
     if (level < 5) level = 5;
     if (level > 7) level = 7;
 }
@@ -48,7 +49,7 @@ Item* Orc::dropItem() const {
 
 // Troll 클래스의 정의
 Troll::Troll(int level)
-    : Monster("Troll", (level * 30 + rand() % 15) * 5, (level * 10 + rand() % 7) * 3) {
+    : Monster("Troll", (level * 30 + rand() % 15) * 3, (level * 10 + rand() % 7) * 3) {
     if (level < 7) level = 7;
     if (level > 9) level = 9;
 }
@@ -59,7 +60,7 @@ Item* Troll::dropItem() const {
 
 // Slime 클래스의 정의
 Slime::Slime(int level)
-    : Monster("Slime", (level * 15 + rand() % 5) * 5, (level * 4 + rand() % 3) * 3) {
+    : Monster("Slime", (level * 15 + rand() % 5) * 3, (level * 4 + rand() % 3) * 3) {
     if (level < 1) level = 1;
     if (level > 3) level = 3;
 }
@@ -83,4 +84,19 @@ std::vector<Monster*> encounterMonsters(int playerLevel) {
         monsters.push_back(new Troll(playerLevel));
     }
     return monsters;
+}
+
+Monster* createMonsterByHabitat(int habitat, int playerLevel) {
+    switch (habitat) {
+    case 0: // 숲 (슬라임)
+        return new Slime(playerLevel);
+    case 1: // 동굴 (고블린)
+        return new Goblin(playerLevel);
+    case 2: // 늪지대 (오크)
+        return new Orc(playerLevel);
+    case 3: // 산 (트롤)
+        return new Troll(playerLevel);
+    default:
+        return nullptr; // 잘못된 서식지 ID
+    }
 }

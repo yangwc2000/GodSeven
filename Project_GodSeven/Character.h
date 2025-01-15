@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include "Item.h"
+#include "Monster.h"
 
 class Character {
 private:
@@ -33,6 +34,7 @@ public:
     void addItem(Item* item);
     void useItem(int index);
     void printInventory() const;
+    void performRandomAttack(Monster* target);
     Item* getItem(int index) const;
     Item* removeItem(int index);
 };
