@@ -24,6 +24,14 @@ GameManager::GameManager() {
     srand(static_cast<unsigned int>(time(nullptr)));
 }
 
+void printWithDelay(const std::string& text, int delay = 50) { // delay 기본값 50ms
+    for (char c : text) {
+        std::cout << c << std::flush; // std::flush 추가
+        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
+    }
+    std::cout << std::endl;
+}
+
 void GameManager::startGame() {
     // 타이틀 화면
     displayTitleScreen();
@@ -35,7 +43,7 @@ void GameManager::startGame() {
 
     Character* player = new Character(playerName);
 
-    std::cout << "\n게임을 시작합니다!\n";
+    printWithDelay("\n게임을 시작합니다!\n", 20);
     player->displayStatus();
 
     // ──────────── 메인 게임 루프 ────────────
@@ -52,7 +60,7 @@ void GameManager::startGame() {
         }
 
         // 행동 메뉴
-        std::cout << "\n어떤 행동을 하시겠습니까?\n";
+        printWithDelay("\n어떤 행동을 하시겠습니까?\n", 20);
         std::cout << "1. 전투하기\n"
             << "2. 인벤토리 열기\n"
             << "3. 스탯창 보기\n"
@@ -104,7 +112,7 @@ void GameManager::startGame() {
             break;
         case 0:
             // 게임 종료
-            std::cout << "게임을 종료합니다.\n";
+            printWithDelay("게임을 종료합니다.\n", 20);
             delete player;
             return;
         default:
@@ -117,13 +125,7 @@ void GameManager::startGame() {
     delete player;
 }
 
-void printWithDelay(const std::string& text, int delay = 50) { // delay 기본값 50ms
-    for (char c : text) {
-        std::cout << c << std::flush; // std::flush 추가
-        std::this_thread::sleep_for(std::chrono::milliseconds(delay));
-    }
-    std::cout << std::endl;
-}
+
 
 void GameManager::displayTitleScreen() {
     system("cls");
@@ -226,11 +228,11 @@ void GameManager::battle(Character* player, int habitat) {
         }
     }
 
-    std::cout << "\n=== 전투 시작! ===\n";
-    std::cout << "몬스터 " << monster->getName()
-        << " (체력: " << monster->getHealth()
-        << ", 공격력: " << monster->getAttack()
-        << ") 이(가) 등장했습니다!\n\n";
+    printWithDelay("\n=== 전투 시작! ===\n", 20);
+    printWithDelay("몬스터 " + monster->getName()
+        + " (체력: " + std::to_string(monster->getHealth())
+        + ", 공격력: " + std::to_string(monster->getAttack())
+        + ") 이(가) 등장했습니다!\n\n", 20);
 
     // 몬스터 아트 출력
     if (monster->getName() == "Slime") {
@@ -314,7 +316,7 @@ void GameManager::battle(Character* player, int habitat) {
 
     // 전투 루프
     while (monster->getHealth() > 0 && player->getHealth() > 0) {
-        std::cout << "\n어떤 행동을 하시겠습니까?\n";
+        printWithDelay("\n어떤 행동을 하시겠습니까?\n", 20);
         std::cout << "1. 공격하기\n"
             << "2. 아이템 사용\n"
             << "3. 도망가기\n" // 도망가기 옵션 추가
@@ -345,7 +347,7 @@ void GameManager::battle(Character* player, int habitat) {
             break;
         case 3:
             // 도망가기
-            std::cout << "[플레이어]" << player->getName() << "이(가) 추하게 도망쳤습니다!\n";
+            printWithDelay("[플레이어]" + player->getName() + "이(가) 추하게 도망쳤습니다!\n", 20);
             delete monster;
             return; // 전투 종료
         default:
@@ -355,7 +357,7 @@ void GameManager::battle(Character* player, int habitat) {
 
         // 몬스터 사망?
         if (monster->getHealth() <= 0) {
-            std::cout << monster->getName() << "를 처치했습니다!\n";
+            printWithDelay(monster->getName() + "를 처치했습니다!\n", 20);
             // 보상
             player->addExperience(30);
             player->addGold(50);
@@ -380,7 +382,7 @@ void GameManager::battle(Character* player, int habitat) {
 
         // 플레이어 사망?
         if (player->getHealth() <= 0) {
-            std::cout << player->getName() << "이(가) 사망했습니다...\n";
+            printWithDelay(player->getName() + "이(가) 사망했습니다...\n", 50);
             delete monster;
             return;
         }
@@ -406,14 +408,14 @@ void GameManager::battleBoss(Character* player) {
         return;
     }
 
-    std::cout << "\n===== 보스전 돌입! 드래곤이 나타났습니다! =====\n";
+    printWithDelay("\n===== 보스전 돌입! 드래곤이 나타났습니다! =====\n", 20);
     // 드래곤 ASCII 아트
 
     int step = 0; // step 변수 정의 및 초기화
     printDragonAndFire(step); // 드래곤 브레스 애니메이션
 
     while (boss->getHealth() > 0 && player->getHealth() > 0) {
-        std::cout << "\n어떤 행동을 하시겠습니까?\n";
+        printWithDelay("\n어떤 행동을 하시겠습니까?\n", 20);
         std::cout << "1. 공격하기\n"
             << "2. 아이템 사용\n"
             << "선택 > ";
@@ -443,12 +445,12 @@ void GameManager::battleBoss(Character* player) {
         }
 
         if (boss->getHealth() <= 0) {
-            std::cout << "드래곤을 쓰러뜨렸습니다!\n";
+            printWithDelay("드래곤을 쓰러뜨렸습니다!\n", 20);
             bossDefeated = true;
             Item* droppedItem = boss->dropItem();
             if (droppedItem) {
                 player->addItem(droppedItem);
-                std::cout << "보스가 " << droppedItem->getName() << "을(를) 드랍했습니다!\n";
+                printWithDelay("보스가 " + droppedItem->getName() + "을(를) 드랍했습니다!\n", 20);
             }
             delete boss;
 
@@ -464,6 +466,7 @@ void GameManager::battleBoss(Character* player) {
                 "전투 밸런싱 : 이재",
                 "잡기술 : 정완훈",
                 "스토리 : 이재, 김태완",
+                "아이템, 디테일 : 송현우",
                 "",
                 "Special Thanks to " + player->getName() + "!",
             };
@@ -486,7 +489,7 @@ void GameManager::battleBoss(Character* player) {
         std::cout << "[플레이어 남은 체력] " << player->getHealth() << "\n";
 
         if (player->getHealth() <= 0) {
-            std::cout << player->getName() << "이(가) 드래곤에게 패배했습니다...\n";
+            printWithDelay(player->getName() + "이(가) 드래곤에게 패배했습니다...\n", 20);
             delete boss;
             return;
         }
@@ -499,7 +502,7 @@ void GameManager::battleBoss(Character* player) {
 // ────────────── 몬스터 서식지 탐험 ──────────────
 void GameManager::exploreHabitat(Character* player) {
     system("cls"); // 화면 클리어
-    std::cout << "\n어떤 서식지로 탐험하시겠습니까?\n";
+    printWithDelay("\n어떤 서식지로 탐험하시겠습니까?\n", 20);
     std::cout << "1. 숲 (슬라임)\n"
         << "2. 동굴 (고블린)\n"
         << "3. 늪지대 (오크)\n"
@@ -516,27 +519,27 @@ void GameManager::exploreHabitat(Character* player) {
 
     switch (choice) {
     case 1:
-        std::cout << "숲으로 탐험을 떠납니다...\n";
+        printWithDelay("숲으로 탐험을 떠납니다...\n", 20);
         // 숲에서 슬라임과 전투
         battle(player, 0);
         break;
     case 2:
-        std::cout << "동굴로 탐험을 떠납니다...\n";
+        printWithDelay("동굴로 탐험을 떠납니다...\n", 20);
         // 동굴에서 고블린과 전투
         battle(player, 1);
         break;
     case 3:
-        std::cout << "늪지대로 탐험을 떠납니다...\n";
+        printWithDelay("늪지대로 탐험을 떠납니다...\n", 20);
         // 늪지대에서 오크와 전투
         battle(player, 2);
         break;
     case 4:
-        std::cout << "산으로 탐험을 떠납니다...\n";
+        printWithDelay("산으로 탐험을 떠납니다...\n", 20);
         // 산에서 트롤과 전투
         battle(player, 3);
         break;
     default:
-        std::cout << "잘못된 입력입니다.\n";
+        printWithDelay("잘못된 입력입니다.\n", 20);
         break;
     }
 }
@@ -544,33 +547,33 @@ void GameManager::exploreHabitat(Character* player) {
 // ────────────── 야바위 게임 ──────────────
 void GameManager::playShellGame(Character* player) {
     system("cls"); // 화면 클리어
-    std::cout << "\n야바위꾼 : 돈 먹고 돈 먹기! 자자, 어서 걸어보라고! 이기면 두배로 돌려주겠네!\n";
+    printWithDelay("\n야바위꾼 : 돈 먹고 돈 먹기! 자자, 어서 걸어보라고! 이기면 두배로 돌려주겠네!\n", 10);
     std::cout << "배팅할 금액을 입력하세요: ";
     int betAmount;
     std::cin >> betAmount;
 
     if (std::cin.fail() || betAmount <= 0 || betAmount > player->getGold()) {
-        std::cout << "야바위꾼 : 자네 그게 무슨 소리인가?\n";
+        printWithDelay("야바위꾼 : 자네 그게 무슨 소리인가?\n", 10);
         return;
     }
 
     // 컵 선택
     int winningCup = rand() % 3 + 1; // 1, 2, 3 중 하나
-    std::cout << "야바위꾼 : 1, 2, 3번 컵 중 하나를 선택해봐: ";
+    printWithDelay("야바위꾼 : 1, 2, 3번 컵 중 하나를 선택해봐: ", 10);
     int playerChoice;
     std::cin >> playerChoice;
 
     if (std::cin.fail() || playerChoice < 1 || playerChoice > 3) {
-        std::cout << "야바위꾼 : 자네 그게 무슨 소리인가?.\n";
+        printWithDelay("야바위꾼 : 자네 그게 무슨 소리인가?.\n", 10);
         return;
     }
 
     if (playerChoice == winningCup) {
-        std::cout << "야바위꾼 : 쳇, 축하하네.\n";
+        printWithDelay("야바위꾼 : 쳇, 축하하네.\n", 10);
         player->addGold(betAmount * 2);
     }
     else {
-        std::cout << "야바위꾼 : 흐흐, 내가 이겼구만. 어라, 벌써 끝인가?\n";
+        printWithDelay("야바위꾼 : 흐흐, 내가 이겼구만. 어라, 벌써 끝인가?\n", 10);
         player->addGold(-betAmount);
     }
 
@@ -605,7 +608,7 @@ Monster* GameManager::generateMonster(int level, int habitat) {
 // ────────────── 인벤토리 열기 ──────────────
 void GameManager::displayInventory(Character* player) {
     system("cls"); // 화면 클리어
-    std::cout << "\n=== 인벤토리 확인 ===\n";
+    printWithDelay("\n=== 인벤토리 확인 ===\n", 20);
     player->printInventory(); // 실제로 아이템 목록을 보여주도록 수정
 
     std::cout << "\n사용할 아이템 번호(취소=음수) > ";
@@ -619,7 +622,7 @@ void GameManager::displayInventory(Character* player) {
 
 void GameManager::visitShop(Character* player) { //------- 명칭 수정
     system("cls"); // 화면 클리어
-    std::cout << "\n===== 상점 입장 =====\n";
+    printWithDelay("\n===== 상점 입장 =====\n", 20);
     bool shopping = true;
     while (shopping) {
         std::cout << "\n[보유 골드] " << player->getGold() << " G\n"
@@ -662,7 +665,7 @@ void GameManager::visitShop(Character* player) { //------- 명칭 수정
             break;
         case 3:
             // 아이템 판매
-            std::cout << "\n=== 인벤토리 확인 ===\n";
+            printWithDelay("\n=== 인벤토리 확인 ===\n", 20);
             player->printInventory();
             std::cout << "\n판매할 아이템 번호(취소=음수) > ";
             int sellChoice;
@@ -678,7 +681,7 @@ void GameManager::visitShop(Character* player) { //------- 명칭 수정
             }
             break;
         case 0:
-            std::cout << "상점을 나갑니다.\n";
+            printWithDelay("상점을 나갑니다.\n", 20);
             shopping = false;
             break;
         default:
