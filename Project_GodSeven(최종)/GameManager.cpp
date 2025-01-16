@@ -221,8 +221,8 @@ void GameManager::displayTitleScreen() {
     );
 
     printWithDelay(
-        "그러나, 우리는 끊임없이 도전하여 \"GOD Seven\"을 향해 도전하리라.\n"
-        "새로운 용사는 지금 바로 전설을 향해 도전하라.\n",
+        "그러나, 우리는 끊임없이 도전하여 \"GOD Seven\"을 향해 나아가리라.\n"
+        "새로운 용사는 지금 바로 전설을 향해 도전하라!\n",
         30
     );
     std::this_thread::sleep_for(std::chrono::milliseconds(50));
@@ -416,6 +416,7 @@ void GameManager::battle(Character* player, int habitat) {
             player->addExperience(30);
             player->addGold(50);
             player->levelUp();
+            player->addMonsterKill();
             // 몬스터가 아이템 드랍
             Item* droppedItem = monster->dropItem();
             if (droppedItem) {
@@ -672,7 +673,7 @@ void GameManager::playShellGame(Character* player) {
         printWithDelay("야바위꾼 : 흐흐, 내가 이겼구만. 어라, 벌써 끝인가?\n", 10);
         playMusic("C:\\MyFolder\\lose.wav", false);
         std::this_thread::sleep_for(std::chrono::seconds(3));
-        player->addGold(-betAmount);
+        player->spendGold(betAmount);
     }
 
     // 현재 골드 표시
@@ -743,7 +744,7 @@ void GameManager::visitShop(Character* player) { //------- 명칭 수정
         case 1:
             // 체력포션 구매
             if (player->getGold() >= 150) {
-                player->addGold(-150);
+                player->spendGold(150);
                 player->addItem(new HealthPotion());
                 std::cout << "체력 회복 포션 구매 완료!\n";
             }
@@ -754,7 +755,7 @@ void GameManager::visitShop(Character* player) { //------- 명칭 수정
         case 2:
             // 공격력 증가 포션 구매
             if (player->getGold() >= 70) {
-                player->addGold(-70);
+                player->spendGold(70);
                 player->addItem(new AttackBoost());
                 std::cout << "영고항력의 신단(공격력 증가) 구매 완료!\n";
             }
